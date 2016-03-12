@@ -26,7 +26,8 @@ Documentation
 ------------
 
 Learn how to use Restu API in 
-[EN](https://github.com/FreezyBee/Restu/blob/master/docs/en/index.md)
+[EN](https://github.com/FreezyBee/Restu/blob/master/docs/en/index.md),
+[CZ](https://github.com/FreezyBee/Restu/blob/master/docs/cs/index.md)
 documentation or 
 official [Oficial Restu API] (https://jsapi.apiary.io/previews/resturestaurace/reference/).
 

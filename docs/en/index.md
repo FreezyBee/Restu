@@ -72,7 +72,7 @@ class HomepagePresenter extends Presenter
             /** @var \FreezyBee\Restu\Service\Restaurants $restaurantsService2 **/
             $restaurantsService2 = $this->api->createService(\FreezyBee\Restu\Service\Restaurants::class, 'rest2', ['id' => 10000]);
 
-            // create restaurant service (restaurantId is defined in config)
+            // create user service
             /** @var \FreezyBee\Restu\Service\User $userService **/
             $userService = $this->api->createService(\FreezyBee\Restu\Service\User::class);
             

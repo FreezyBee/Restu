@@ -1,0 +1,23 @@
+<style>
+    #nette-debug .nette-restuPanel,
+    #tracy-debug .nette-restuPanel { min-width: 700px; }
+    #nette-debug .nette-restuPanel table,
+    #tracy-debug .nette-restuPanel table { width: 100%; }
+    #tracy-debug .nette-restuPanel h2 { font-weight: bold; font-size: 18px; }
+</style>
+
+<div class="nette-inner tracy-inner nette-restuPanel">
+    <?php foreach($this->resources as $resource): ?>
+        <h2>
+            <?php echo $esc(strtoupper((string) $resource->request->getMethod())); ?>
+            <?php echo $esc((string) $resource->request->getUri()); ?>
+            STATUS: <?php echo $esc((string) $resource->status); ?>
+        </h2>
+        <table>
+            <?php $output = $dumpItems($resource); ?>
+            <tr><th>Time</th><td><?php echo $esc(number_format($resource->time * 1000, 2, '.', ' ')) ?>&nbsp;ms</td></tr>
+            <tr><th>Request</th><td><?php echo $output->request; ?></td></tr>
+            <tr><th>Response</th><td><?php echo $output->response; ?></td></tr>
+        </table>
+    <?php endforeach; ?>
+</div>

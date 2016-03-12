@@ -1,0 +1,37 @@
+{
+  "name": "freezy-bee/restu",
+  "type": "library",
+  "description": "Integration Restu API into Nette Framework.",
+  "keywords": [
+    "nette",
+    "freezy-bee",
+    "restu"
+  ],
+  "homepage": "http://freezybee.ifire.cz",
+  "license": [
+    "BSD-3-Clause",
+    "GPL-2.0",
+    "GPL-3.0"
+  ],
+  "authors": [
+    {
+      "name": "Jakub Janata",
+      "homepage": "https://ifire.cz"
+    }
+  ],
+  "require": {
+    "guzzlehttp/guzzle": "6.1",
+    "nette/application": "~2.3",
+    "nette/bootstrap": "~2.3",
+    "nette/di": "~2.3",
+    "tracy/tracy": "~2.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "FreezyBee\\Restu\\": "src/"
+    },
+    "classmap": [
+      "src/exceptions.php"
+    ]
+  }
+}

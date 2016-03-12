@@ -7,7 +7,7 @@ Restu API for Nette Framework.
 Requirements
 ------------
 
-FreezyBee/Restu requires PHP 5.4
+FreezyBee/Restu requires PHP 5.5
 
 - [Nette Framework](https://github.com/nette/nette)
 

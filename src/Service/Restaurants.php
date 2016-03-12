@@ -54,7 +54,8 @@ class Restaurants extends BaseService
      */
     public function getDetail()
     {
-        return $this->api->call('GET', self::RESOURCE_NAME, $this->id);
+        $endpoint = $this->api->generateEndpoint([self::RESOURCE_NAME, $this->id]);
+        return $this->api->call('GET', $endpoint);
     }
 
     /**

@@ -117,7 +117,7 @@ class Api extends Object
             throw new \Exception("Service with name $serviceName is allready registered id API");
         }
 
-        if (!class_exists($serviceType) || class_implements(BaseService::class)) {
+        if (!class_exists($serviceType) || !is_subclass_of($serviceType, BaseService::class)) {
             throw new \Exception("Invalid parameter \$serviceType - $serviceType");
         }
 

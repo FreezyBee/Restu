@@ -2,6 +2,11 @@
 
 namespace FreezyBee\Restu\Http;
 
+use FreezyBee\Restu\AuthenticationException;
+use FreezyBee\Restu\BadRequestException;
+use FreezyBee\Restu\MissingParameterException;
+use FreezyBee\Restu\RestuException;
+use FreezyBee\Restu\ServerException;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
@@ -32,7 +37,7 @@ class Resource extends Object
     private $result;
 
     /**
-     * @var RequestException
+     * @var RestuException
      */
     private $exception;
 
@@ -71,7 +76,7 @@ class Resource extends Object
         $this->timeResponse = microtime(true);
 
         try {
-            $this->result = Json::decode($response->getBody()->getContents());
+            $this->result = Json::decode((string)$response->getBody());
         } catch (JsonException $e) {
             // TODO
             $this->exception = $e;
@@ -84,16 +89,40 @@ class Resource extends Object
     public function setErrorResponse(GuzzleException $guzzleException)
     {
         if ($guzzleException instanceof RequestException) {
-            $this->exception = $guzzleException;
             $this->response = $response = $guzzleException->getResponse();
 
-            try {
-                $this->result = Json::decode($response->getBody()->getContents());
-            } catch (JsonException $e) {
-                $this->result = 'invalid result';
+            if ($response) {
+                try {
+                    $this->result = Json::decode((string)$response->getBody());
+                } catch (JsonException $e) {
+                    $this->result = [];
+                }
+
+                switch ($guzzleException->getCode()) {
+                    case 400:
+                        $e = MissingParameterException::class;
+                        break;
+                    case 401:
+                        $e = AuthenticationException::class;
+                        break;
+                    case 404:
+                        $e = BadRequestException::class;
+                        break;
+                    case 500:
+                        $e = ServerException::class;
+                        break;
+                    default:
+                        $e = RestuException::class;
+                }
+
+                $this->exception = new $e($this->result, $guzzleException);
+
+                $this->status = $this->response->getStatusCode();
+
+            } else {
+                $this->exception = new RestuException([], $guzzleException);
             }
-            
-            $this->status = $this->response->getStatusCode();
+
         } else {
             // TODO
             $this->exception = $guzzleException;

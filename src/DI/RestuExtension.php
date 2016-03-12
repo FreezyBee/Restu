@@ -17,6 +17,7 @@ class RestuExtension extends CompilerExtension
         'apiKey' => null,
         'apiUrl' => 'https://rest-api.restu.cz/',
         'version' => 'v1',
+        'restaurantId' => null,
         'debugger' => '%debugMode%'
     ];
 

@@ -3,6 +3,7 @@
 namespace FreezyBee\Restu;
 
 use FreezyBee\Restu\Http\Resource;
+use FreezyBee\Restu\Service\BaseService;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
@@ -28,6 +29,11 @@ class Api extends Object
     private $config;
 
     /**
+     * @var array
+     */
+    private $services;
+
+    /**
      * Api constructor.
      * @param array $config
      */
@@ -38,24 +44,21 @@ class Api extends Object
 
     /**
      * @param string $method
-     * @param string $resource
-     * @param int $id
-     * @param string $subResource
-     * @param array $parameters
+     * @param string $endpoint
+     * @param array $bodyParams
      * @return mixed
-     * @throws RestuException
+     * @throws \Exception
      */
-    public function call($method, $resource, $id = 0, $subResource = '', array $parameters = [])
+    public function call($method, $endpoint, array $bodyParams = [])
     {
         $headers = ['X-Restu-Api-Key' => $this->config['apiKey']];
-        $uri = $this->getApiUri($resource, $id, $subResource);
+        $uri = $this->config['apiUrl'] . $this->config['version'] . '/' . $endpoint;
 
         try {
-            $body = $parameters ? Json::encode($parameters) : null;
+            $body = $bodyParams ? Json::encode($bodyParams) : null;
         } catch (JsonException $e) {
-            throw new RestuException('Restu request - invalid json', 667, $e);
+            throw new \Exception('Restu request - invalid json', 666, $e);
         }
-
         $client = new Client;
         $request = new Request($method, $uri, $headers, $body);
         $resource = new Resource($request);
@@ -75,39 +78,49 @@ class Api extends Object
         $exception = $resource->getException();
 
         if ($exception) {
-            throw new RestuException('Restu response: ' . $exception->getCode(), $exception->getCode(), $exception);
+            throw $exception;
         } else {
             return $resource->getResult();
         }
     }
 
     /**
-     * @param string $resource
-     * @param int $id
-     * @param string $subResource
+     * @param array $pathArray
+     * @param array $queryArray
      * @return string
      */
-    public function getApiUri($resource, $id = 0, $subResource = '')
+    public function generateEndpoint(array $pathArray, array $queryArray = [])
     {
-        $uri = $this->config['apiUrl'] . $this->config['version'] . '/' . $resource;
+        $uri = implode("/", $pathArray);
 
-        if ($id) {
-            $uri .= '/' . $id;
-        }
-
-        if ($subResource) {
-            $uri .= '/' . $subResource;
+        if ($queryArray) {
+            $uri .= '?' . http_build_query($queryArray);
         }
 
         return $uri;
     }
 
-    // TODO
     /**
-     *
+     * @param string $serviceType
+     * @param string $serviceName
+     * @param array $params
+     * @return BaseService
+     * @throws \Exception
      */
-    public function callService()
+    public function createService($serviceType, $serviceName = '', array $params = [])
     {
+        if ($serviceName == '') {
+            $serviceName = $serviceType;
+        }
 
+        if (isset($this->services[$serviceName])) {
+            throw new \Exception("Service with name $serviceName is allready registered id API");
+        }
+
+        if (!class_exists($serviceType) || class_implements(BaseService::class)) {
+            throw new \Exception("Invalid parameter \$serviceType - $serviceType");
+        }
+
+        return $this->services[$serviceName] = new $serviceType($this, $this->config, $params);
     }
 }

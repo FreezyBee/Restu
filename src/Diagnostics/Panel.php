@@ -6,6 +6,7 @@ use FreezyBee\Restu\Api;
 use FreezyBee\Restu\Http;
 use Nette\Object;
 use Nette\Utils\Callback;
+use Nette\Utils\Json;
 use Tracy\Debugger;
 use Tracy\Dumper;
 use Tracy\IBarPanel;
@@ -17,7 +18,7 @@ use Tracy\IBarPanel;
 class Panel extends Object implements IBarPanel
 {
     /**
-     * @var Resource[]
+     * @var Http\Resource[]
      */
     private $resources = [];
 
@@ -61,7 +62,7 @@ class Panel extends Object implements IBarPanel
             $s = '<h3>Headers</h3>';
             $s .= Dumper::toHtml($r->getHeaders(), ['collapse' => true]);
             $s .= '<h3>Contents</h3>';
-            $request = $s . Dumper::toHtml($r->getBody()->getContents(), ['collapse' => true]);
+            $request = $s . Dumper::toHtml(Json::decode((string)$r->getBody()), ['collapse' => true]);
 
             $r = $resource->getResponse();
             $s = '<h3>Headers</h3>';

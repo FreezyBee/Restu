@@ -18,12 +18,25 @@ extensions:
 	restu: FreezyBee\Restu\DI\RestuExtension
 ```
 
+
 Minimal configuration
 ------------------
 
 ```yml
 restu:
 	apiKey: **your api key**
+```
+
+
+Full configuration
+------------------
+
+```yml
+restu:
+	apiKey: **your api key**
+	restaurantId: **restaurant id**
+    apiUrl: https://rest-api.restu.cz/
+    version: v1
 ```
 
 
@@ -47,32 +60,25 @@ class HomepagePresenter extends Presenter
     public function actionTest()
     {
 
-        // get restaurants
         try {
+            // get restaurants
             $result = $this->api->call('GET', 'restaurants');
 
+            // create restaurant service (restaurantId is defined in config)
+            /** @var \FreezyBee\Restu\Service\Restaurants $restaurantsService1 **/
+            $restaurantsService1 = $this->api->createService(\FreezyBee\Restu\Service\Restaurants::class);
+
+            // create restaurant service (restaurantId defined in parameter)
+            /** @var \FreezyBee\Restu\Service\Restaurants $restaurantsService2 **/
+            $restaurantsService2 = $this->api->createService(\FreezyBee\Restu\Service\Restaurants::class, 'rest2', ['id' => 10000]);
+
+            // create restaurant service (restaurantId is defined in config)
+            /** @var \FreezyBee\Restu\Service\User $userService **/
+            $userService = $this->api->createService(\FreezyBee\Restu\Service\User::class);
+            
+            $menus = $restaurantService1->getMenus();
+            
             ...
-
-        } catch (RestuException $e) {
-            Debugger::log($e);
-        }
-
-        // create new Campaign
-        $params = [
-            "recipients" => [
-                "list_id" => "aaa2**dsds"
-            ],
-            "type" => "regular",
-            "settings" => [
-                "subject_line" => "TEST",
-                "reply_to" => "test@email.com",
-                "from_name" => "Customer Service"
-            ]
-        ];
-
-        try {
-            $result = $this->api->call('POST', '/campaigns', $params);
-            dump($result);
 
         } catch (RestuException $e) {
             Debugger::log($e);

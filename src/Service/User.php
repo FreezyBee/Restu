@@ -15,12 +15,13 @@ class User extends BaseService
 
     /**
      * @param $email
-     * @return mixed
+     * @return bool
      * @throws \Exception
      */
     public function isRegistered($email)
     {
         $endpoint = $this->api->generateEndpoint([self::RESOURCE_NAME, 'is_registered']);
-        return $this->api->call('POST', $endpoint, ['email' => $email]);
+        $result = $this->api->call('POST', $endpoint, ['email' => $email]);
+        return $result->registered;
     }
 }

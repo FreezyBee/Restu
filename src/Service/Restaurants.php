@@ -160,8 +160,9 @@ class Restaurants extends BaseService
      * @param $name
      * @param $email
      * @param $phone
-     * @param $smoking
+     * @param int $smoking
      * @param string $note
+     * @param null $password
      * @param string $voucherType
      * @param string $voucherCode
      * @param bool $verification
@@ -177,6 +178,7 @@ class Restaurants extends BaseService
         $phone,
         $smoking,
         $note = '',
+        $password = null,
         $voucherType = '',
         $voucherCode = '',
         $verification = true
@@ -193,6 +195,10 @@ class Restaurants extends BaseService
             'phone_number' => $phone,
             'note' => $note
         ];
+
+        if ($password) {
+            $params['password'] = $password;
+        }
 
         if ($voucherType && $voucherCode) {
             $params['voucher_type'] = $voucherType;

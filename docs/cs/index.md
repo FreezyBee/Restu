@@ -73,9 +73,9 @@ class HomepagePresenter extends Presenter
             /** @var \FreezyBee\Restu\Service\Restaurants $restaurantsService2 **/
             $restaurantsService2 = $this->api->createService(\FreezyBee\Restu\Service\Restaurants::class, 'rest2', ['id' => 10000]);
 
-            // vytvori sluzbu uzivatel
+            // vytvori sluzbu uzivatel s nastavenym jazykem
             /** @var \FreezyBee\Restu\Service\User $userService **/
-            $userService = $this->api->createService(\FreezyBee\Restu\Service\User::class);
+            $userService = $this->api->createService(\FreezyBee\Restu\Service\User::class, '', ['language' => 'en']);
             
             // zavolani metody sluzby
             $menus = $restaurantService1->getMenus();

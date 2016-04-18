@@ -21,7 +21,7 @@ class User extends BaseService
     public function isRegistered($email)
     {
         $endpoint = $this->api->generateEndpoint([self::RESOURCE_NAME, 'is_registered']);
-        $result = $this->api->call('POST', $endpoint, ['email' => $email]);
+        $result = $this->api->call('POST', $endpoint, ['email' => $email], $this->language);
         return $result->registered;
     }
 }

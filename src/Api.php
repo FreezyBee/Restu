@@ -46,12 +46,18 @@ class Api extends Object
      * @param string $method
      * @param string $endpoint
      * @param array $bodyParams
+     * @param null $language
      * @return mixed
      * @throws \Exception
      */
-    public function call($method, $endpoint, array $bodyParams = [])
+    public function call($method, $endpoint, array $bodyParams = [], $language = null)
     {
         $headers = ['X-Restu-Api-Key' => $this->config['apiKey']];
+
+        if ($language) {
+            $headers['Accept-Language'] = $language;
+        }
+
         $uri = $this->config['apiUrl'] . $this->config['version'] . '/' . $endpoint;
 
         try {

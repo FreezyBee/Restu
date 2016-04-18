@@ -17,6 +17,11 @@ abstract class BaseService extends Object
     protected $api;
 
     /**
+     * @var string
+     */
+    protected $language = null;
+
+    /**
      * BaseService constructor.
      * @param Api $api
      * @param array $config
@@ -25,5 +30,9 @@ abstract class BaseService extends Object
     public function __construct(Api $api, array $config, array $params)
     {
         $this->api = $api;
+
+        if (isset($params['language'])) {
+            $this->language = $params['language'];
+        }
     }
 }

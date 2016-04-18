@@ -55,7 +55,7 @@ class Restaurants extends BaseService
     public function getDetail()
     {
         $endpoint = $this->api->generateEndpoint([self::RESOURCE_NAME, $this->id]);
-        return $this->api->call('GET', $endpoint);
+        return $this->api->call('GET', $endpoint, [], $this->language);
     }
 
     /**
@@ -76,7 +76,7 @@ class Restaurants extends BaseService
         }
 
         $endpoint = $this->api->generateEndpoint([self::RESOURCE_NAME, $this->id, 'reviews'], $params);
-        return $this->api->call('GET', $endpoint);
+        return $this->api->call('GET', $endpoint, [], $this->language);
     }
 
 
@@ -86,7 +86,7 @@ class Restaurants extends BaseService
     public function getDailyMenus()
     {
         $endpoint = $this->api->generateEndpoint([self::RESOURCE_NAME, $this->id, 'daily_menus']);
-        return $this->api->call('GET', $endpoint);
+        return $this->api->call('GET', $endpoint, [], $this->language);
     }
 
     /**
@@ -95,7 +95,7 @@ class Restaurants extends BaseService
     public function getMenus()
     {
         $endpoint = $this->api->generateEndpoint([self::RESOURCE_NAME, $this->id, 'menus']);
-        return $this->api->call('GET', $endpoint);
+        return $this->api->call('GET', $endpoint, [], $this->language);
     }
 
     /**
@@ -105,7 +105,7 @@ class Restaurants extends BaseService
     public function getMenuDetail($menuId)
     {
         $endpoint = $this->api->generateEndpoint([self::RESOURCE_NAME, $this->id, 'menus', $menuId]);
-        return $this->api->call('GET', $endpoint);
+        return $this->api->call('GET', $endpoint, [], $this->language);
     }
 
     /**
@@ -114,7 +114,7 @@ class Restaurants extends BaseService
     public function getReservationDefaultTerms()
     {
         $endpoint = $this->api->generateEndpoint([self::RESOURCE_NAME, $this->id, 'reservation_terms']);
-        return $this->api->call('GET', $endpoint);
+        return $this->api->call('GET', $endpoint, [], $this->language);
     }
 
     /**
@@ -124,7 +124,7 @@ class Restaurants extends BaseService
     public function getReservationTerms(\DateTime $date)
     {
         $endpoint = $this->api->generateEndpoint([self::RESOURCE_NAME, $this->id, 'reservation_terms']);
-        return $this->api->call('POST', $endpoint, ['date' => $date->format('Y-m-d')]);
+        return $this->api->call('POST', $endpoint, ['date' => $date->format('Y-m-d')], $this->language);
     }
 
     /**
@@ -150,7 +150,7 @@ class Restaurants extends BaseService
         }
 
         $endpoint = $this->api->generateEndpoint([self::RESOURCE_NAME, $this->id, 'verify_capacity']);
-        return $this->api->call('POST', $endpoint, $params);
+        return $this->api->call('POST', $endpoint, $params, [], $this->language);
     }
 
     /**
@@ -209,6 +209,6 @@ class Restaurants extends BaseService
             [self::RESOURCE_NAME, $this->id, 'reservations'],
             ['verification' => $verification]
         );
-        return $this->api->call('POST', $endpoint, $params);
+        return $this->api->call('POST', $endpoint, $params, $this->language);
     }
 }

@@ -75,8 +75,16 @@ class Resource extends Object
         $this->status = $response->getStatusCode();
         $this->timeResponse = microtime(true);
 
+        $body = (string)$response->getBody();
+
+        // fix nette 2.4
+        if ($body == '') {
+            $this->result = [];
+            return;
+        }
+        
         try {
-            $this->result = Json::decode((string)$response->getBody());
+            $this->result = Json::decode($body);
         } catch (JsonException $e) {
             // TODO
             $this->exception = $e;

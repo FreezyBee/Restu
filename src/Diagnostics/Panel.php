@@ -59,10 +59,13 @@ class Panel extends Object implements IBarPanel
 
         $dumpItems = function (Http\Resource $resource) {
             $r = $resource->getRequest();
-            $s = '<h3>Headers</h3>';
-            $s .= Dumper::toHtml($r->getHeaders(), ['collapse' => true]);
-            $s .= '<h3>Contents</h3>';
-            $request = $s . Dumper::toHtml(Json::decode((string)$r->getBody()), ['collapse' => true]);
+            $request = '<h3>Headers</h3>';
+            $request .= Dumper::toHtml($r->getHeaders(), ['collapse' => true]);
+            $body = (string)$r->getBody();
+            if ($body) {
+                $request .= '<h3>Contents</h3>';
+                $request .= Dumper::toHtml(Json::decode($body), ['collapse' => true]);
+            }
 
             $r = $resource->getResponse();
             $s = '<h3>Headers</h3>';
